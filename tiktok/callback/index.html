@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Autorização do TikTok · Corte na Lata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .code{display:block;width:100%;font:15px/1.5 ui-monospace,Consolas,monospace;padding:12px;border:1px solid var(--rule);background:#fff;color:var(--ink);word-break:break-all;resize:vertical;min-height:110px}
+  .btn{margin-top:12px;font:600 16px "Instrument Sans",system-ui,sans-serif;background:var(--yellow);color:var(--ink);border:2px solid var(--ink);padding:10px 16px;cursor:pointer}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <a class="brand" href="../../">CORTE NA LATA</a>
+  <nav aria-label="Páginas"><a href="../../">Início</a><a href="../../privacy.html">Privacidade</a><a href="../../terms.html">Termos</a></nav>
+</div></header>
+<main>
+  <h1>Autorização do TikTok</h1>
+
+  <section id="ok" hidden>
+    <p class="lead">Pronto. Copie a <strong>URL inteira</strong> abaixo e cole no terminal, onde o comando <code>auth tiktok</code> está esperando.</p>
+    <textarea id="url" class="code" readonly aria-label="URL com o código de autorização"></textarea>
+    <button id="copy" class="btn" type="button">Copiar</button>
+    <p id="copied" class="updated" role="status" aria-live="polite"></p>
+    <div class="box">O código vale por poucos minutos e só funciona uma vez. Esta página não envia nada para lugar nenhum: o código fica só na barra de endereço do seu navegador.</div>
+  </section>
+
+  <section id="err" hidden>
+    <p class="lead">O TikTok não autorizou.</p>
+    <p id="errmsg"></p>
+    <p>Rode o comando <code>auth tiktok</code> de novo e confirme na tela do TikTok.</p>
+  </section>
+
+  <section id="none">
+    <p class="lead">Esta é a página de retorno do login do TikTok do <strong>Corte na Lata Uploader</strong>. Ela só mostra algo quando o TikTok redireciona para cá depois de uma autorização.</p>
+  </section>
+
+  <section class="en" lang="en">
+    <h2>In English</h2>
+    <p>This is the TikTok Login Kit redirect page of <strong>Corte na Lata Uploader</strong>. After authorizing, copy the full URL into the waiting terminal command. Nothing on this page is sent anywhere. See the <a href="../../privacy.html#en">Privacy policy</a> and <a href="../../terms.html#en">Terms of use</a>.</p>
+  </section>
+</main>
+<footer><div class="bar"><span>Corte na Lata · 2026</span><a href="../../">Início</a></div></footer>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var code = q.get("code"), error = q.get("error");
+    if (code) {
+      document.getElementById("none").hidden = true;
+      document.getElementById("ok").hidden = false;
+      var box = document.getElementById("url");
+      box.value = location.href;
+      document.getElementById("copy").addEventListener("click", function () {
+        box.select();
+        var done = function () { document.getElementById("copied").textContent = "Copiado. Agora cole no terminal."; };
+        if (navigator.clipboard) { navigator.clipboard.writeText(box.value).then(done, function () { document.execCommand("copy"); done(); }); }
+        else { document.execCommand("copy"); done(); }
+      });
+    } else if (error) {
+      document.getElementById("none").hidden = true;
+      document.getElementById("err").hidden = false;
+      document.getElementById("errmsg").textContent = (q.get("error_description") || error);
+    }
+  })();
+</script>
+</body>
+</html>
